@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SnapTimer Estúdio Pro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* VARIÁVEIS DE TEMA */
+    :root {
+      --bg-outer: #090d16;
+      --text-main: #f1f5f9;
+      --card-bg: #131b2e;
+      --card-border: #1e293b;
+      --header-bg: #182238;
+      --controls-bg: #0d1322;
+      --input-bg: #0f172a;
+      --input-border: #334155;
+      --text-muted: #94a3b8;
+      --display-bg: #030712;
+      --display-border: #1f2937;
+      --stage-bg: #0f172a;
+      --stage-border: #1e293b;
+      --stage-completed-bg: #090d16;
+      --stage-completed-border: #151d2a;
+      --toggle-btn-bg: #1e293b;
+      --toggle-btn-color: #38bdf8;
+      --toggle-btn-hover: #334155;
+      --shadow-color: rgba(0, 0, 0, 0.4);
+    }
+
+    [data-theme="light"] {
+      --bg-outer: #f1f5f9;
+      --text-main: #0f172a;
+      --card-bg: #ffffff;
+      --card-border: #cbd5e1;
+      --header-bg: #e2e8f0;
+      --controls-bg: #f8fafc;
+      --input-bg: #ffffff;
+      --input-border: #94a3b8;
+      --text-muted: #64748b;
+      --display-bg: #0f172a;
+      --display-border: #334155;
+      --stage-bg: #f8fafc;
+      --stage-border: #e2e8f0;
+      --stage-completed-bg: #f1f5f9;
+      --stage-completed-border: #cbd5e1;
+      --toggle-btn-bg: #e2e8f0;
+      --toggle-btn-color: #0284c7;
+      --toggle-btn-hover: #cbd5e1;
+      --shadow-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .st-outer-wrapper {
+      all: initial;
+      display: block;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      background-color: var(--bg-outer) !important;
+      color: var(--text-main) !important;
+      padding: 16px 12px !important;
+      box-sizing: border-box !important;
+      width: 100% !important;
+      min-height: 100vh !important;
+      line-height: 1.4 !important;
+      transition: background-color 0.3s ease, color 0.3s ease !important;
+    }
+
+    .st-outer-wrapper * {
+      box-sizing: border-box !important;
+      font-family: inherit !important;
+    }
+
+    .st-container {
+      max-width: 520px !important;
+      margin: 0 auto !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 12px !important;
+    }
+
+    /* CARDS GENÉRICOS */
+    .st-card {
+      background: var(--card-bg) !important;
+      border: 1px solid var(--card-border) !important;
+      border-radius: 12px !important;
+      padding: 14px 16px !important;
+      box-shadow: 0 10px 25px -5px var(--shadow-color), 0 8px 10px -6px var(--shadow-color) !important;
+      font-size: 13px !important;
+      transition: background-color 0.3s ease, border-color 0.3s ease !important;
+    }
+
+    .st-card-header {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      border-bottom: 1px solid var(--card-border) !important;
+      padding-bottom: 10px !important;
+      margin-bottom: 12px !important;
+      user-select: none !important;
+    }
+
+    .st-card-header.collapsed-border {
+      border-bottom: none !important;
+      margin-bottom: 0 !important;
+      padding-bottom: 2px !important;
+    }
+
+    .st-card-title {
+      font-size: 13px !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.5px !important;
+      text-transform: uppercase !important;
+      color: var(--text-muted) !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+    }
+
+    /* BOTÕES DE TOGGLE & TEMA */
+    .st-header-actions {
+      display: flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+    }
+
+    .st-toggle-btn {
+      background: var(--toggle-btn-bg) !important;
+      border: 1px solid var(--input-border) !important;
+      color: var(--toggle-btn-color) !important;
+      font-size: 11px !important;
+      font-weight: 600 !important;
+      cursor: pointer !important;
+      padding: 5px 10px !important;
+      border-radius: 6px !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      transition: all 0.2s ease !important;
+    }
+    .st-toggle-btn:hover {
+      background: var(--toggle-btn-hover) !important;
+      filter: brightness(1.05) !important;
+    }
+
+    .st-theme-btn {
+      background: var(--toggle-btn-bg) !important;
+      border: 1px solid var(--input-border) !important;
+      color: var(--text-main) !important;
+      font-size: 12px !important;
+      cursor: pointer !important;
+      padding: 5px 8px !important;
+      border-radius: 6px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      transition: all 0.2s ease !important;
+    }
+    .st-theme-btn:hover {
+      background: var(--toggle-btn-hover) !important;
+    }
+
+    /* STATUS DOT */
+    .st-status-dot {
+      width: 10px !important;
+      height: 10px !important;
+      border-radius: 50% !important;
+      background-color: #10b981 !important;
+      box-shadow: 0 0 10px #10b981 !important;
+      display: inline-block !important;
+      transition: all 0.3s ease !important;
+    }
+    .st-status-dot.overtime {
+      background-color: #ef4444 !important;
+      box-shadow: 0 0 12px #ef4444 !important;
+      animation: blinkDot 0.8s infinite alternate !important;
+    }
+    @keyframes blinkDot {
+      from { opacity: 1; }
+      to { opacity: 0.2; }
+    }
+
+    /* GRID & INPUTS */
+    .st-grid-2 {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 10px !important;
+    }
+
+    .st-field {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 4px !important;
+    }
+
+    .st-field.full {
+      grid-column: span 2 !important;
+    }
+
+    .st-field label {
+      font-size: 11px !important;
+      font-weight: 600 !important;
+      color: var(--text-muted) !important;
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+    }
+
+    .st-badge-default {
+      font-size: 9px !important;
+      padding: 1px 5px !important;
+      border-radius: 4px !important;
+      background: rgba(56, 189, 248, 0.15) !important;
+      color: #38bdf8 !important;
+      font-weight: 600 !important;
+    }
+
+    .st-field select,
+    .st-field input[type="number"] {
+      padding: 8px 10px !important;
+      border: 1px solid var(--input-border) !important;
+      border-radius: 8px !important;
+      background: var(--input-bg) !important;
+      font-size: 12px !important;
+      font-weight: 600 !important;
+      color: var(--text-main) !important;
+      outline: none !important;
+      width: 100% !important;
+      transition: border-color 0.2s ease !important;
+    }
+
+    .st-field select {
+      cursor: pointer !important;
+    }
+
+    .st-field select:focus,
+    .st-field input[type="number"]:focus {
+      border-color: #38bdf8 !important;
+    }
+
+    .st-field input[type="number"]:disabled {
+      opacity: 0.45 !important;
+      cursor: not-allowed !important;
+    }
+
+    .st-check-row {
+      display: flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+      padding: 8px 10px !important;
+      background: var(--input-bg) !important;
+      border-radius: 8px !important;
+      border: 1px solid var(--card-border) !important;
+      font-size: 11px !important;
+      font-weight: 500 !important;
+      color: var(--text-main) !important;
+      cursor: pointer !important;
+      transition: background 0.2s ease !important;
+    }
+    .st-check-row:hover {
+      filter: brightness(1.05) !important;
+    }
+
+    .st-check-row input[type="checkbox"] {
+      cursor: pointer !important;
+      accent-color: #ef4444 !important;
+      width: 16px !important;
+      height: 16px !important;
+      border-radius: 4px !important;
+    }
+
+    .st-summary-badge {
+      margin-top: 10px !important;
+      padding: 10px 12px !important;
+      background: rgba(56, 189, 248, 0.08) !important;
+      border: 1px solid rgba(56, 189, 248, 0.2) !important;
+      border-radius: 8px !important;
+      font-size: 11px !important;
+      color: var(--toggle-btn-color) !important;
+      line-height: 1.5 !important;
+    }
+
+    .st-summary-badge.alert-cut {
+      background: rgba(245, 158, 11, 0.1) !important;
+      border-color: rgba(245, 158, 11, 0.3) !important;
+      color: #fcd34d !important;
+    }
+
+    /* BOTÕES */
+    .st-btn-toolbar {
+      display: grid !important;
+      grid-template-columns: 1.3fr 1fr !important;
+      gap: 8px !important;
+      margin-top: 12px !important;
+    }
+
+    .st-btn-quick-row {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr 1fr !important;
+      gap: 6px !important;
+      margin-top: 6px !important;
+    }
+
+    .st-btn {
+      padding: 9px 12px !important;
+      border-radius: 8px !important;
+      border: none !important;
+      font-size: 12px !important;
+      font-weight: 700 !important;
+      cursor: pointer !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 6px !important;
+      color: #ffffff !important;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+      user-select: none !important;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+    }
+    .st-btn:active {
+      transform: scale(0.97) !important;
+    }
+
+    .st-btn-start { background: linear-gradient(135deg, #059669, #10b981) !important; }
+    .st-btn-start:hover { filter: brightness(1.1) !important; }
+    .st-btn-pause { background: linear-gradient(135deg, #d97706, #f59e0b) !important; }
+    .st-btn-pause:hover { filter: brightness(1.1) !important; }
+    .st-btn-reset { background: var(--input-border) !important; color: var(--text-main) !important; }
+    .st-btn-reset:hover { filter: brightness(1.1) !important; }
+    
+    .st-btn-intro { background: #6d28d9 !important; }
+    .st-btn-intro:hover { background: #5b21b6 !important; }
+    .st-btn-next  { background: #2563eb !important; }
+    .st-btn-next:hover { background: #1d4ed8 !important; }
+    .st-btn-prev  { background: #475569 !important; }
+    .st-btn-prev:hover { background: #334155 !important; }
+    .st-btn-cut   { background: #dc2626 !important; }
+    .st-btn-cut:hover { background: #b91c1c !important; }
+    .st-btn-adjust { background: #0284c7 !important; font-size: 11px !important; }
+    .st-btn-adjust:hover { background: #0369a1 !important; }
+
+    /* JANELAS DOS DISPLAY DE TEMPO */
+    .snap-window {
+      background: var(--card-bg) !important;
+      border: 1px solid var(--card-border) !important;
+      box-shadow: 0 8px 20px var(--shadow-color) !important;
+      border-radius: 12px !important;
+      overflow: hidden !important;
+      transition: all 0.3s ease !important;
+    }
+    .snap-window.in-overtime {
+      border-color: #ef4444 !important;
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.3) !important;
+    }
+
+    .snap-titlebar {
+      background: var(--header-bg) !important;
+      border-bottom: 1px solid var(--card-border) !important;
+      padding: 6px 12px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      user-select: none !important;
+    }
+    .snap-window.in-overtime .snap-titlebar {
+      background: #2a1215 !important;
+      border-bottom-color: #7f1d1d !important;
+    }
+
+    .snap-title-text {
+      display: flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      font-size: 12px !important;
+      color: var(--text-main) !important;
+      font-weight: 600 !important;
+    }
+
+    .snap-overtime-tag {
+      display: none;
+      background: #ef4444 !important;
+      color: #ffffff !important;
+      font-size: 9px !important;
+      font-weight: 800 !important;
+      padding: 2px 6px !important;
+      border-radius: 4px !important;
+      letter-spacing: 0.5px !important;
+      animation: flashTag 1s infinite alternate !important;
+    }
+    @keyframes flashTag {
+      from { opacity: 1; }
+      to { opacity: 0.4; }
+    }
+
+    .snap-sys-btns {
+      display: flex !important;
+      align-items: center !important;
+      gap: 4px !important;
+    }
+
+    .snap-sys-btn {
+      width: 18px !important;
+      height: 18px !important;
+      font-size: 10px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      background: var(--input-border) !important;
+      border: none !important;
+      border-radius: 50% !important;
+      color: var(--text-muted) !important;
+      cursor: pointer !important;
+      padding: 0 !important;
+      transition: all 0.2s ease !important;
+    }
+    .snap-sys-btn:hover { background: #475569 !important; color: #fff !important; }
+    .snap-sys-btn.close:hover { background: #ef4444 !important; color: #fff !important; }
+
+    .snap-controls-bar {
+      background: var(--controls-bg) !important;
+      border-bottom: 1px solid var(--card-border) !important;
+      padding: 6px 12px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      font-size: 12px !important;
+      color: var(--text-muted) !important;
+    }
+
+    .snap-minutes-group {
+      display: flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      font-weight: 500 !important;
+      font-size: 11px !important;
+    }
+
+    .snap-input-box {
+      width: 42px !important;
+      height: 22px !important;
+      background: var(--header-bg) !important;
+      border: 1px solid var(--input-border) !important;
+      border-radius: 4px !important;
+      text-align: center !important;
+      font-family: 'JetBrains Mono', monospace !important;
+      font-size: 11px !important;
+      line-height: 20px !important;
+      font-weight: 700 !important;
+      color: #38bdf8 !important;
+    }
+
+    .snap-action-btns {
+      display: flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+    }
+
+    .snap-round-btn {
+      width: 24px !important;
+      height: 24px !important;
+      border-radius: 6px !important;
+      border: 1px solid var(--input-border) !important;
+      background: var(--card-bg) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      font-size: 10px !important;
+      cursor: pointer !important;
+      color: var(--text-main) !important;
+      transition: all 0.15s ease !important;
+      padding: 0 !important;
+    }
+    .snap-round-btn:hover { background: #38bdf8 !important; color: #0f172a !important; border-color: #38bdf8 !important; }
+
+    /* DISPLAYS OLEDS */
+    .snap-display {
+      font-family: 'JetBrains Mono', monospace !important;
+      font-weight: 700 !important;
+      font-size: 52px !important;
+      line-height: 1.1 !important;
+      letter-spacing: -1.5px !important;
+      text-align: center !important;
+      padding: 14px 6px !important;
+      margin: 8px !important;
+      border-radius: 8px !important;
+      user-select: none !important;
+      transition: all 0.2s ease !important;
+      background: var(--display-bg) !important;
+      border: 1px solid var(--display-border) !important;
+    }
+
+    .display-yellow {
+      color: #facc15 !important;
+      text-shadow: 0 0 12px rgba(250, 204, 21, 0.3) !important;
+    }
+
+    .display-red {
+      color: #f87171 !important;
+      text-shadow: 0 0 12px rgba(248, 113, 113, 0.3) !important;
+    }
+
+    .snap-display.is-negative {
+      animation: pulseOvertime 1.2s infinite alternate !important;
+      color: #ef4444 !important;
+      text-shadow: 0 0 16px rgba(239, 68, 68, 0.6) !important;
+    }
+    @keyframes pulseOvertime {
+      0% { filter: brightness(1); }
+      100% { filter: brightness(0.8) contrast(1.2); }
+    }
+
+    /* CARD DE ETAPAS */
+    .st-stage-card {
+      background: var(--card-bg) !important;
+      border: 1px solid var(--card-border) !important;
+      border-radius: 12px !important;
+      padding: 12px 14px !important;
+      box-shadow: 0 8px 20px var(--shadow-color) !important;
+      font-size: 12px !important;
+    }
+
+    .st-stage-header {
+      font-size: 11px !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.5px !important;
+      text-transform: uppercase !important;
+      color: var(--text-muted) !important;
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      user-select: none !important;
+    }
+    .st-stage-header.has-bottom-margin {
+      margin-bottom: 10px !important;
+      border-bottom: 1px solid var(--card-border) !important;
+      padding-bottom: 8px !important;
+    }
+
+    .st-stage-list {
+      list-style: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 6px !important;
+    }
+
+    .st-stage-row {
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      padding: 7px 10px !important;
+      border-radius: 8px !important;
+      background: var(--stage-bg) !important;
+      border: 1px solid var(--stage-border) !important;
+      font-size: 12px !important;
+      color: var(--text-muted) !important;
+      transition: all 0.2s ease !important;
+    }
+
+    .st-stage-row.active {
+      background: rgba(245, 158, 11, 0.1) !important;
+      border-color: rgba(245, 158, 11, 0.4) !important;
+      font-weight: 700 !important;
+      color: #fbbf24 !important;
+    }
+
+    .st-stage-row.completed {
+      background: var(--stage-completed-bg) !important;
+      border-color: var(--stage-completed-border) !important;
+      color: var(--text-muted) !important;
+      opacity: 0.7 !important;
+      text-decoration: line-through !important;
+    }
+
+    .st-stage-row.overtime {
+      background: rgba(239, 68, 68, 0.15) !important;
+      border-color: #ef4444 !important;
+      font-weight: 700 !important;
+      color: #f87171 !important;
+      text-decoration: none !important;
+    }
+
+    .st-stage-time-info {
+      display: flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      font-family: 'JetBrains Mono', monospace !important;
+      font-size: 11px !important;
+    }
+
+    .st-badge-cut {
+      background-color: #ef4444 !important;
+      color: #ffffff !important;
+      font-size: 9px !important;
+      font-weight: 700 !important;
+      padding: 2px 5px !important;
+      border-radius: 4px !important;
+      font-family: 'Inter', sans-serif !important;
+    }
+
+    @media (max-width: 480px) {
+      .snap-display {
+        font-size: 38px !important;
+        letter-spacing: -1px !important;
+      }
+      .st-btn-quick-row {
+        grid-template-columns: 1fr 1fr !important;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="st-outer-wrapper" id="outerWrapper">
+  <div class="st-container">
+
+    <!-- PAINEL SUPERIOR: CONFIGURAÇÕES E CONTROLES GERAIS -->
+    <div class="st-card">
+      <div class="st-card-header" id="cfgHeader">
+        <div class="st-card-title">
+          <span class="st-status-dot" id="mainStatusDot"></span>
+          <span>Painel de Gravação</span>
+        </div>
+        <div class="st-header-actions">
+          <button type="button" id="btnThemeToggle" class="st-theme-btn" title="Alternar entre Tema Claro e Escuro">
+            <span id="icoTheme">☀️</span>
+          </button>
+          <button type="button" id="btnToggleCfg" class="st-toggle-btn" title="Alternar visibilidade das configurações">
+            <span id="txtToggleCfg">Ocultar Opções</span>
+            <span id="icoToggleCfg">▲</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- SEÇÃO RECOLHÍVEL DAS CONFIGURAÇÕES -->
+      <div id="cfgPanelWrapper">
+        <div id="cfgPanel" class="st-grid-2">
+          <div class="st-field">
+            <label for="selSessionPlan">Modelo de Aula (Predefinição):</label>
+            <select id="selSessionPlan">
+              <option value="42">42 minutos (Grade Curta)</option>
+              <option value="57" selected>57 minutos (Grade Padrão)</option>
+              <option value="60">60 minutos (Grade Estendida)</option>
+            </select>
+          </div>
+
+          <div class="st-field">
+            <label for="selIntroMode">Regra da Introdução:</label>
+            <select id="selIntroMode">
+              <option value="include_add" selected>✅ Incluir na aula</option>
+              <option value="discount_sub">➖ Descontar da aula</option>
+            </select>
+          </div>
+
+          <!-- 1. INTRODUÇÃO -->
+          <div class="st-field">
+            <label for="inpIntro">1. Introdução (min):</label>
+            <input type="number" id="inpIntro" min="0" max="60" value="5">
+          </div>
+
+          <!-- 2. DESENVOLVIMENTO -->
+          <div class="st-field">
+            <label for="inpDev">2. Desenvolvimento (min):</label>
+            <input type="number" id="inpDev" min="0" max="90" value="32">
+          </div>
+
+          <!-- 3. ORIENTAÇÃO (PADRÃO EDITÁVEL) -->
+          <div class="st-field">
+            <label for="inpOrient">
+              <span>3. Orientação (min):</span>
+              <span class="st-badge-default">Padrão: 2</span>
+            </label>
+            <input type="number" id="inpOrient" min="0" max="30" value="2">
+          </div>
+
+          <!-- 4. EXECUÇÃO -->
+          <div class="st-field">
+            <label for="inpExec">4. Execução (min):</label>
+            <input type="number" id="inpExec" min="0" max="60" value="5">
+          </div>
+
+          <!-- 5. SOCIALIZAÇÃO -->
+          <div class="st-field">
+            <label for="inpSoc">5. Socialização (min):</label>
+            <input type="number" id="inpSoc" min="0" max="60" value="5">
+          </div>
+
+          <!-- 6. MINUTO ENEM -->
+          <div class="st-field">
+            <label for="selEnem">6. Terá Minuto ENEM?</label>
+            <select id="selEnem">
+              <option value="sim" selected>Sim (Ativo)</option>
+              <option value="nao">Não (+tempo na Socialização)</option>
+            </select>
+          </div>
+
+          <div class="st-field">
+            <label for="inpEnem">
+              <span>Tempo Minuto ENEM (min):</span>
+              <span class="st-badge-default">Padrão: 3</span>
+            </label>
+            <input type="number" id="inpEnem" min="0" max="30" value="3">
+          </div>
+
+          <!-- 7. CONCLUSÃO (PADRÃO EDITÁVEL) -->
+          <div class="st-field">
+            <label for="inpConcl">
+              <span>7. Conclusão (min):</span>
+              <span class="st-badge-default">Padrão: 4</span>
+            </label>
+            <input type="number" id="inpConcl" min="0" max="30" value="4">
+          </div>
+
+          <div class="st-field full">
+            <label for="selCutStrategy">Forma de Desconto de Estouro:</label>
+            <select id="selCutStrategy">
+              <option value="conclusion" selected>Descontar da Conclusão primeiro</option>
+              <option value="cascade">Descontar em cascata das próximas</option>
+              <option value="proportional">Dividir desconto entre próximas fases</option>
+            </select>
+          </div>
+
+          <div class="st-field full">
+            <label class="st-check-row">
+              <input type="checkbox" id="chkAutoDeductOvertime" checked>
+              <span>Descontar automaticamente o tempo estourado das etapas seguintes</span>
+            </label>
+          </div>
+
+          <div class="st-field full">
+            <label class="st-check-row">
+              <input type="checkbox" id="chkAllowOvertime" checked>
+              <span>Permitir contagem negativa após zerar (exibe sinal negativo -)</span>
+            </label>
+          </div>
+
+          <div class="st-field full">
+            <label class="st-check-row">
+              <input type="checkbox" id="chkAutoAdvance">
+              <span>Avançar de fase automaticamente ao zerar</span>
+            </label>
+          </div>
+
+          <div class="st-field full">
+            <label class="st-check-row">
+              <input type="checkbox" id="chkAudioAlert" checked>
+              <span>Emitir sinal sonoro nas mudanças de fase e no término</span>
+            </label>
+          </div>
+        </div>
+
+        <div id="summaryBadge" class="st-summary-badge">
+          Calculando grade horária...
+        </div>
+      </div>
+
+      <!-- BOTÕES DE CONTROLE RÁPIDO -->
+      <div class="st-btn-toolbar">
+        <button type="button" id="btnPlayMaster" class="st-btn st-btn-start">
+          <span id="btnPlayText">Iniciar Contagem</span>
+        </button>
+        <button type="button" id="btnResetMaster" class="st-btn st-btn-reset">
+          Reiniciar Sessão
+        </button>
+      </div>
+
+      <div class="st-btn-quick-row">
+        <button type="button" id="btnGoIntro" class="st-btn st-btn-intro" title="Vai diretamente para a Introdução e ajusta a contagem">
+          ⏮ Introdução
+        </button>
+        <button type="button" id="btnPrevPhase" class="st-btn st-btn-prev" title="Volta para a etapa anterior">
+          ◀ Anterior
+        </button>
+        <button type="button" id="btnNextPhase" class="st-btn st-btn-next" title="Avança para a próxima etapa aplicando compensação se houver">
+          Próxima ▶
+        </button>
+      </div>
+
+      <div class="st-btn-quick-row">
+        <button type="button" id="btnManualCompensate" class="st-btn st-btn-cut" title="Aplica imediatamente o corte do excesso decorrido nas próximas fases">
+          ✂ Compensar Estouro
+        </button>
+        <button type="button" id="btnAddMin" class="st-btn st-btn-adjust" title="Adiciona 1 minuto na fase atual">+1 Min</button>
+        <button type="button" id="btnSubMin" class="st-btn st-btn-adjust" title="Subtrai 1 minuto da fase atual">-1 Min</button>
+      </div>
+    </div>
+
+    <!-- JANELA 1: CRONÔMETRO SUPERIOR (FASE ATUAL - AMARELO) -->
+    <div class="snap-window" id="winPhase">
+      <div class="snap-titlebar">
+        <div class="snap-title-text">
+          <span>⏱️</span>
+          <span>SnapTimer - <strong id="lblPhaseTitle">Introdução</strong></span>
+          <span class="snap-overtime-tag" id="tagOvertimePhase">ESTOURO DE FASE</span>
+        </div>
+        <div class="snap-sys-btns">
+          <button type="button" class="snap-sys-btn">_</button>
+          <button type="button" class="snap-sys-btn">□</button>
+          <button type="button" class="snap-sys-btn close">✕</button>
+        </div>
+      </div>
+
+      <div class="snap-controls-bar">
+        <div class="snap-minutes-group">
+          <span>Restante:</span>
+          <div class="snap-input-box" id="lblMinPhase">05</div>
+          <span>min</span>
+        </div>
+        <div class="snap-action-btns">
+          <button type="button" class="snap-round-btn" id="btnMiniPlay1" title="Iniciar / Pausar">▶</button>
+          <button type="button" class="snap-round-btn" id="btnMiniReset1" title="Parar e Reiniciar">■</button>
+        </div>
+      </div>
+
+      <div id="dispPhase" class="snap-display display-yellow">
+        00:05:00
+      </div>
+    </div>
+
+    <!-- JANELA 2: CRONÔMETRO INFERIOR (TEMPO TOTAL DE GRAVAÇÃO - VERMELHO) -->
+    <div class="snap-window" id="winTotal">
+      <div class="snap-titlebar">
+        <div class="snap-title-text">
+          <span>🎬</span>
+          <span>SnapTimer - <strong id="lblTotalStatus">Tempo Total de Gravação</strong></span>
+          <span class="snap-overtime-tag" id="tagOvertimeTotal">GRAVAÇÃO ESTOURADA</span>
+        </div>
+        <div class="snap-sys-btns">
+          <button type="button" class="snap-sys-btn">_</button>
+          <button type="button" class="snap-sys-btn">□</button>
+          <button type="button" class="snap-sys-btn close">✕</button>
+        </div>
+      </div>
+
+      <div class="snap-controls-bar">
+        <div class="snap-minutes-group">
+          <span>Restante:</span>
+          <div class="snap-input-box" id="lblMinTotal">57</div>
+          <span>min</span>
+        </div>
+        <div class="snap-action-btns">
+          <button type="button" class="snap-round-btn" id="btnMiniPlay2" title="Iniciar / Pausar">▶</button>
+          <button type="button" class="snap-round-btn" id="btnMiniReset2" title="Parar e Reiniciar">■</button>
+        </div>
+      </div>
+
+      <div id="dispTotal" class="snap-display display-red">
+        00:57:00
+      </div>
+    </div>
+
+    <!-- PAINEL INFERIOR RECOLHÍVEL: LISTA DAS ETAPAS E COMPENSAÇÕES -->
+    <div class="st-stage-card">
+      <div class="st-stage-header has-bottom-margin" id="stageCardHeader">
+        <span id="lblProgress">Etapa 1 de 7</span>
+        <button type="button" id="btnToggleStages" class="st-toggle-btn" title="Alternar visibilidade do planejamento de etapas">
+          <span id="txtToggleStages">Ocultar Etapas</span>
+          <span id="icoToggleStages">▲</span>
+        </button>
+      </div>
+      <div id="stagesListWrapper">
+        <ul id="stagesList" class="st-stage-list"></ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  (function () {
+    let running = false;
+    let timerId = null;
+    let totalTargetSec = 0;
+    let elapsedSec = 0;
+    let lastTickTime = null;
+    let stages = [];
+    let currentStageIndex = 0;
+    let totalDeductedSoFar = 0;
+
+    let audioCtx = null;
+    function playBeep(freq = 880, type = 'sine', duration = 0.25) {
+      if (!chkAudioAlert.checked) return;
+      try {
+        if (!audioCtx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (AudioContextClass) audioCtx = new AudioContextClass();
+        }
+        if (audioCtx && audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        if (!audioCtx) return;
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {
+        console.warn("Alerta sonoro:", e);
+      }
+    }
+
+    // Elementos do DOM
+    const outerWrapper = document.getElementById("outerWrapper");
+    const btnThemeToggle = document.getElementById("btnThemeToggle");
+    const icoTheme = document.getElementById("icoTheme");
+
+    const selSessionPlan = document.getElementById("selSessionPlan");
+    const selIntroMode = document.getElementById("selIntroMode");
+
+    // Inputs numéricos das 7 etapas (todos editáveis, inclusive os padrões)
+    const inpIntro = document.getElementById("inpIntro");
+    const inpDev = document.getElementById("inpDev");
+    const inpOrient = document.getElementById("inpOrient");
+    const inpExec = document.getElementById("inpExec");
+    const inpSoc = document.getElementById("inpSoc");
+    const selEnem = document.getElementById("selEnem");
+    const inpEnem = document.getElementById("inpEnem");
+    const inpConcl = document.getElementById("inpConcl");
+
+    const selCutStrategy = document.getElementById("selCutStrategy");
+    const chkAutoDeductOvertime = document.getElementById("chkAutoDeductOvertime");
+    const chkAllowOvertime = document.getElementById("chkAllowOvertime");
+    const chkAutoAdvance = document.getElementById("chkAutoAdvance");
+    const chkAudioAlert = document.getElementById("chkAudioAlert");
+    const summaryBadge = document.getElementById("summaryBadge");
+    const mainStatusDot = document.getElementById("mainStatusDot");
+
+    const btnPlayMaster = document.getElementById("btnPlayMaster");
+    const btnPlayText = document.getElementById("btnPlayText");
+    const btnResetMaster = document.getElementById("btnResetMaster");
+    const btnGoIntro = document.getElementById("btnGoIntro");
+    const btnPrevPhase = document.getElementById("btnPrevPhase");
+    const btnNextPhase = document.getElementById("btnNextPhase");
+    const btnManualCompensate = document.getElementById("btnManualCompensate");
+    const btnAddMin = document.getElementById("btnAddMin");
+    const btnSubMin = document.getElementById("btnSubMin");
+
+    const btnMiniPlay1 = document.getElementById("btnMiniPlay1");
+    const btnMiniReset1 = document.getElementById("btnMiniReset1");
+    const btnMiniPlay2 = document.getElementById("btnMiniPlay2");
+    const btnMiniReset2 = document.getElementById("btnMiniReset2");
+
+    // Elementos de Recolher / Expandir
+    const btnToggleCfg = document.getElementById("btnToggleCfg");
+    const txtToggleCfg = document.getElementById("txtToggleCfg");
+    const icoToggleCfg = document.getElementById("icoToggleCfg");
+    const cfgPanelWrapper = document.getElementById("cfgPanelWrapper");
+    const cfgHeader = document.getElementById("cfgHeader");
+
+    const btnToggleStages = document.getElementById("btnToggleStages");
+    const txtToggleStages = document.getElementById("txtToggleStages");
+    const icoToggleStages = document.getElementById("icoToggleStages");
+    const stagesListWrapper = document.getElementById("stagesListWrapper");
+    const stageCardHeader = document.getElementById("stageCardHeader");
+
+    const winPhase = document.getElementById("winPhase");
+    const winTotal = document.getElementById("winTotal");
+    const dispPhase = document.getElementById("dispPhase");
+    const dispTotal = document.getElementById("dispTotal");
+    const lblPhaseTitle = document.getElementById("lblPhaseTitle");
+    const lblTotalStatus = document.getElementById("lblTotalStatus");
+    const lblMinPhase = document.getElementById("lblMinPhase");
+    const lblMinTotal = document.getElementById("lblMinTotal");
+    const lblProgress = document.getElementById("lblProgress");
+    const stagesList = document.getElementById("stagesList");
+    const tagOvertimePhase = document.getElementById("tagOvertimePhase");
+    const tagOvertimeTotal = document.getElementById("tagOvertimeTotal");
+
+    // GERENCIAMENTO DE TEMA
+    function setTheme(theme) {
+      if (theme === 'light') {
+        outerWrapper.setAttribute('data-theme', 'light');
+        icoTheme.textContent = '🌙';
+        localStorage.setItem('snaptimer_theme', 'light');
+      } else {
+        outerWrapper.removeAttribute('data-theme');
+        icoTheme.textContent = '☀️';
+        localStorage.setItem('snaptimer_theme', 'dark');
+      }
+    }
+
+    function toggleTheme() {
+      const currentTheme = outerWrapper.getAttribute('data-theme');
+      if (currentTheme === 'light') {
+        setTheme('dark');
+      } else {
+        setTheme('light');
+      }
+    }
+
+    const savedTheme = localStorage.getItem('snaptimer_theme') || 'dark';
+    setTheme(savedTheme);
+    btnThemeToggle.addEventListener('click', toggleTheme);
+
+    function formatTimeWithSign(seconds) {
+      const isNeg = seconds < 0;
+      const total = Math.abs(Math.round(seconds));
+      const h = Math.floor(total / 3600);
+      const m = Math.floor((total % 3600) / 60);
+      const s = total % 60;
+      const sign = isNeg ? "-" : "";
+      return `${sign}${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    function formatMinutesOnly(seconds) {
+      const isNeg = seconds < 0;
+      const m = Math.ceil(Math.abs(seconds) / 60);
+      return `${isNeg ? '-' : ''}${String(m).padStart(2, '0')}`;
+    }
+
+    // APLICA OS VALORES PADRÃO CONFORME A GRADE ESCOLHIDA (42, 57 OU 60 MIN)
+    function applyPlanPreset() {
+      const plan = parseInt(selSessionPlan.value, 10);
+      if (plan === 42) {
+        // 4 + 21 + 2 + 4 + 4 + 3 + 4 = 42 min
+        inpIntro.value = 4;
+        inpDev.value = 21;
+        inpOrient.value = 2;
+        inpExec.value = 4;
+        inpSoc.value = 4;
+        inpEnem.value = 3;
+        inpConcl.value = 4;
+      } else if (plan === 57) {
+        // 5 + 32 + 2 + 5 + 5 + 3 + 4 = 56 min (ou 57 com ajuste fino; mantém 4 padrão na conclusão e soma total exata)
+        inpIntro.value = 5;
+        inpDev.value = 32;
+        inpOrient.value = 2;
+        inpExec.value = 5;
+        inpSoc.value = 5;
+        inpEnem.value = 3;
+        inpConcl.value = 4;
+      } else if (plan === 60) {
+        // Base 57 + 3 min extras na Conclusão (total 60 min, todos editáveis)
+        inpIntro.value = 5;
+        inpDev.value = 32;
+        inpOrient.value = 2;
+        inpExec.value = 5;
+        inpSoc.value = 5;
+        inpEnem.value = 3;
+        inpConcl.value = 8;
+      }
+      buildInitialSchedule(false);
+    }
+
+    function readSafeInt(inputEl, fallback = 0) {
+      const val = parseInt(inputEl.value, 10);
+      return isNaN(val) || val < 0 ? fallback : val;
+    }
+
+    function buildInitialSchedule(resetProgress = true) {
+      const introMin = readSafeInt(inpIntro, 0);
+      const introMode = selIntroMode.value;
+      const devMin = readSafeInt(inpDev, 0);
+      const orientMin = readSafeInt(inpOrient, 2);
+      const execMin = readSafeInt(inpExec, 0);
+      const socBaseMin = readSafeInt(inpSoc, 0);
+      const hasEnem = selEnem.value === "sim";
+      const enemMin = readSafeInt(inpEnem, 3);
+      const conclMin = readSafeInt(inpConcl, 4);
+
+      inpEnem.disabled = !hasEnem;
+
+      // Se não tiver Minuto ENEM, o tempo dele (padrão 3 min) vai para a Socialização
+      const effectiveSocMin = socBaseMin + (hasEnem ? 0 : enemMin);
+
+      let calculatedStages = [];
+
+      // 1. INTRODUÇÃO
+      if (introMode === "include_add" && introMin > 0) {
+        calculatedStages.push({
+          id: 'intro',
+          name: "Introdução",
+          originalSec: introMin * 60,
+          allocatedSec: introMin * 60,
+          elapsedSec: 0
+        });
+      }
+
+      // 2. DESENVOLVIMENTO
+      if (devMin > 0) {
+        calculatedStages.push({
+          id: 'dev',
+          name: "Desenvolvimento",
+          originalSec: devMin * 60,
+          allocatedSec: devMin * 60,
+          elapsedSec: 0
+        });
+      }
+
+      // 3. ORIENTAÇÃO
+      if (orientMin > 0) {
+        calculatedStages.push({
+          id: 'orient',
+          name: "Orientação",
+          originalSec: orientMin * 60,
+          allocatedSec: orientMin * 60,
+          elapsedSec: 0
+        });
+      }
+
+      // 4. EXECUÇÃO
+      if (execMin > 0) {
+        calculatedStages.push({
+          id: 'exec',
+          name: "Execução",
+          originalSec: execMin * 60,
+          allocatedSec: execMin * 60,
+          elapsedSec: 0
+        });
+      }
+
+      // 5. SOCIALIZAÇÃO
+      if (effectiveSocMin > 0) {
+        calculatedStages.push({
+          id: 'soc',
+          name: hasEnem ? "Socialização" : `Socialização (+${enemMin}m ENEM)`,
+          originalSec: effectiveSocMin * 60,
+          allocatedSec: effectiveSocMin * 60,
+          elapsedSec: 0
+        });
+      }
+
+      // 6. MINUTO ENEM (QUANDO TEM)
+      if (hasEnem && enemMin > 0) {
+        calculatedStages.push({
+          id: 'enem',
+          name: "Minuto ENEM",
+          originalSec: enemMin * 60,
+          allocatedSec: enemMin * 60,
+          elapsedSec: 0
+        });
+      }
+
+      // 7. CONCLUSÃO
+      if (conclMin > 0) {
+        calculatedStages.push({
+          id: 'concl',
+          name: "Conclusão",
+          originalSec: conclMin * 60,
+          allocatedSec: conclMin * 60,
+          elapsedSec: 0
+        });
+      }
+
+      // Soma dinâmica real das etapas ativas (garante 100% de precisão mesmo quando o usuário edita qualquer campo)
+      totalTargetSec = calculatedStages.reduce((sum, s) => sum + s.allocatedSec, 0);
+      stages = calculatedStages;
+
+      if (resetProgress) {
+        elapsedSec = 0;
+        currentStageIndex = 0;
+        totalDeductedSoFar = 0;
+        stages.forEach(st => st.elapsedSec = 0);
+      } else if (currentStageIndex >= stages.length) {
+        currentStageIndex = Math.max(0, stages.length - 1);
+      }
+
+      const effectiveTotalMin = Math.round(totalTargetSec / 60);
+      renderSummaryBadge(effectiveTotalMin, conclMin, introMin, introMode);
+      updateDisplays();
+    }
+
+    function renderSummaryBadge(totalMin, conclMin, introMin, introMode) {
+      const modeText = introMode === "include_add" 
+        ? `Introdução: <strong>${introMin} min (incluída)</strong>` 
+        : `Introdução: <strong>descontada</strong>`;
+
+      summaryBadge.innerHTML = `
+        Soma das Etapas: <strong>${totalMin} min</strong> | 
+        ${modeText} | 
+        Conclusão: <strong>${conclMin} min</strong>
+      `;
+      summaryBadge.className = totalDeductedSoFar > 0 ? "st-summary-badge alert-cut" : "st-summary-badge";
+      if (totalDeductedSoFar > 0) {
+        summaryBadge.innerHTML += ` | <span style="color:#f87171;font-weight:700;">✂ ${Math.round(totalDeductedSoFar)}s compensados!</span>`;
+      }
+    }
+
+    function applyOvertimeCut(overtimeSec) {
+      if (overtimeSec <= 0) return 0;
+      const strategy = selCutStrategy.value;
+      let remainingToDeduct = overtimeSec;
+
+      const subsequentStages = stages.slice(currentStageIndex + 1);
+      if (subsequentStages.length === 0) return 0;
+
+      if (strategy === "conclusion") {
+        const conclusionStage = stages[stages.length - 1];
+        if (conclusionStage && conclusionStage !== stages[currentStageIndex]) {
+          const cut = Math.min(conclusionStage.allocatedSec, remainingToDeduct);
+          conclusionStage.allocatedSec -= cut;
+          remainingToDeduct -= cut;
+        }
+
+        if (remainingToDeduct > 0) {
+          for (let i = stages.length - 2; i > currentStageIndex; i--) {
+            const cut = Math.min(stages[i].allocatedSec, remainingToDeduct);
+            stages[i].allocatedSec -= cut;
+            remainingToDeduct -= cut;
+            if (remainingToDeduct <= 0) break;
+          }
+        }
+      } else if (strategy === "cascade") {
+        for (let i = currentStageIndex + 1; i < stages.length; i++) {
+          const cut = Math.min(stages[i].allocatedSec, remainingToDeduct);
+          stages[i].allocatedSec -= cut;
+          remainingToDeduct -= cut;
+          if (remainingToDeduct <= 0) break;
+        }
+      } else if (strategy === "proportional") {
+        const totalSubsequentSec = subsequentStages.reduce((sum, s) => sum + s.allocatedSec, 0);
+        if (totalSubsequentSec > 0) {
+          const deductionFraction = Math.min(1, remainingToDeduct / totalSubsequentSec);
+          subsequentStages.forEach(s => {
+            const cut = Math.round(s.allocatedSec * deductionFraction);
+            s.allocatedSec = Math.max(0, s.allocatedSec - cut);
+          });
+          remainingToDeduct = 0;
+        }
+      }
+
+      const totalCutApplied = overtimeSec - remainingToDeduct;
+      totalDeductedSoFar += totalCutApplied;
+      const lastConclMin = stages.length > 0 ? Math.round(stages[stages.length - 1].allocatedSec / 60) : 0;
+      renderSummaryBadge(Math.round(totalTargetSec / 60), lastConclMin, readSafeInt(inpIntro, 0), selIntroMode.value);
+      return totalCutApplied;
+    }
+
+    function updateDisplays() {
+      const remainingTotalSec = totalTargetSec - elapsedSec;
+      const isTotalOvertime = remainingTotalSec < 0;
+
+      dispTotal.textContent = formatTimeWithSign(remainingTotalSec);
+      lblMinTotal.textContent = formatMinutesOnly(remainingTotalSec);
+
+      if (isTotalOvertime) {
+        winTotal.classList.add("in-overtime");
+        dispTotal.classList.add("is-negative");
+        tagOvertimeTotal.style.display = "inline-block";
+        lblTotalStatus.textContent = "GRAVAÇÃO ESTOURADA";
+        mainStatusDot.className = "st-status-dot overtime";
+      } else {
+        winTotal.classList.remove("in-overtime");
+        dispTotal.classList.remove("is-negative");
+        tagOvertimeTotal.style.display = "none";
+        lblTotalStatus.textContent = "Tempo Total de Gravação";
+        mainStatusDot.className = "st-status-dot";
+      }
+
+      const stage = stages[currentStageIndex];
+      if (stage) {
+        const remainingStageSec = stage.allocatedSec - stage.elapsedSec;
+        const isStageOvertime = remainingStageSec < 0;
+
+        dispPhase.textContent = formatTimeWithSign(remainingStageSec);
+        lblPhaseTitle.textContent = stage.name;
+        lblMinPhase.textContent = formatMinutesOnly(remainingStageSec);
+
+        if (isStageOvertime) {
+          winPhase.classList.add("in-overtime");
+          dispPhase.classList.add("is-negative");
+          tagOvertimePhase.style.display = "inline-block";
+        } else {
+          winPhase.classList.remove("in-overtime");
+          dispPhase.classList.remove("is-negative");
+          tagOvertimePhase.style.display = "none";
+        }
+      } else {
+        dispPhase.textContent = "00:00:00";
+        lblPhaseTitle.textContent = "Gravação Finalizada";
+        lblMinPhase.textContent = "00";
+        winPhase.classList.remove("in-overtime");
+        dispPhase.classList.remove("is-negative");
+        tagOvertimePhase.style.display = "none";
+      }
+
+      renderStagesList();
+    }
+
+    function renderStagesList() {
+      stagesList.innerHTML = stages.map((st, i) => {
+        let statusClass = "";
+        let prefix = `${i + 1}. `;
+
+        if (i < currentStageIndex) {
+          statusClass = "completed";
+          prefix += "✓ ";
+        } else if (i === currentStageIndex) {
+          const isOver = (st.allocatedSec - st.elapsedSec) < 0;
+          statusClass = isOver ? "active overtime" : "active";
+          prefix += "▶ ";
+        }
+
+        const allocMins = (st.allocatedSec / 60).toFixed(1).replace('.0', '');
+        const isCut = st.allocatedSec < st.originalSec;
+        const cutDifference = Math.round((st.originalSec - st.allocatedSec) / 60);
+
+        return `
+          <li class="st-stage-row ${statusClass}">
+            <span>${prefix}${st.name}</span>
+            <div class="st-stage-time-info">
+              ${isCut ? `<span class="st-badge-cut" title="Corte de compensação por estouro anterior">-${cutDifference}m</span>` : ''}
+              <span>${allocMins} min (${formatTimeWithSign(st.allocatedSec)})</span>
+            </div>
+          </li>
+        `;
+      }).join('');
+
+      lblProgress.textContent = `Etapa ${Math.min(currentStageIndex + 1, stages.length)} de ${stages.length}`;
+    }
+
+    function goToIntroduction() {
+      const introIdx = stages.findIndex(s => s.id === 'intro');
+      if (introIdx !== -1) {
+        currentStageIndex = introIdx;
+        stages[introIdx].elapsedSec = 0;
+        playBeep(700, 'sine', 0.25);
+        updateDisplays();
+      } else {
+        selIntroMode.value = "include_add";
+        buildInitialSchedule(false);
+        const newIntroIdx = stages.findIndex(s => s.id === 'intro');
+        if (newIntroIdx !== -1) {
+          currentStageIndex = newIntroIdx;
+        }
+        playBeep(700, 'sine', 0.25);
+        updateDisplays();
+      }
+    }
+
+    function advanceToNextStage(manual = false) {
+      const currentStage = stages[currentStageIndex];
+      if (!currentStage) return;
+
+      const overtimeSec = currentStage.elapsedSec - currentStage.allocatedSec;
+      if (overtimeSec > 0 && chkAutoDeductOvertime.checked) {
+        applyOvertimeCut(overtimeSec);
+        playBeep(520, 'square', 0.25);
+      }
+
+      if (currentStageIndex < stages.length - 1) {
+        currentStageIndex++;
+        playBeep(660, 'sine', 0.2);
+        updateDisplays();
+      } else {
+        if (!chkAllowOvertime.checked && !manual) {
+          stopTimer();
+          btnPlayText.textContent = "Gravação Concluída";
+          playBeep(440, 'triangle', 0.5);
+        }
+        updateDisplays();
+      }
+    }
+
+    function returnToPrevStage() {
+      if (currentStageIndex > 0) {
+        currentStageIndex--;
+        playBeep(550, 'sine', 0.15);
+        updateDisplays();
+      }
+    }
+
+    function triggerManualCompensation() {
+      const currentStage = stages[currentStageIndex];
+      if (!currentStage) return;
+
+      const overtimeSec = currentStage.elapsedSec - currentStage.allocatedSec;
+      if (overtimeSec > 0) {
+        applyOvertimeCut(overtimeSec);
+        currentStage.allocatedSec = currentStage.elapsedSec;
+        playBeep(900, 'triangle', 0.3);
+        updateDisplays();
+      }
+    }
+
+    function tick() {
+      const now = Date.now();
+      const deltaSec = (now - lastTickTime) / 1000;
+      lastTickTime = now;
+
+      elapsedSec += deltaSec;
+      const currentStage = stages[currentStageIndex];
+      if (currentStage) {
+        currentStage.elapsedSec += deltaSec;
+
+        const stageRemaining = currentStage.allocatedSec - currentStage.elapsedSec;
+
+        if (stageRemaining <= 0 && stageRemaining + deltaSec > 0) {
+          playBeep(880, 'square', 0.3);
+        }
+
+        if (chkAutoAdvance.checked && currentStage.elapsedSec >= currentStage.allocatedSec) {
+          if (currentStageIndex < stages.length - 1) {
+            advanceToNextStage(false);
+          }
+        }
+      }
+
+      if (!chkAllowOvertime.checked && (totalTargetSec - elapsedSec) <= 0) {
+        elapsedSec = totalTargetSec;
+        stopTimer();
+        btnPlayText.textContent = "Tempo Encerrado";
+        playBeep(440, 'sawtooth', 0.6);
+        updateDisplays();
+        return;
+      }
+
+      updateDisplays();
+    }
+
+    function startTimer() {
+      if (running) return;
+      lastTickTime = Date.now();
+      timerId = setInterval(tick, 100);
+      running = true;
+      btnPlayText.textContent = "Pausar";
+      btnPlayMaster.className = "st-btn st-btn-pause";
+      btnMiniPlay1.textContent = "⏸";
+      btnMiniPlay2.textContent = "⏸";
+    }
+
+    function stopTimer() {
+      if (!running) return;
+      clearInterval(timerId);
+      running = false;
+      btnPlayText.textContent = "Retomar";
+      btnPlayMaster.className = "st-btn st-btn-start";
+      btnMiniPlay1.textContent = "▶";
+      btnMiniPlay2.textContent = "▶";
+    }
+
+    function toggleTimer() {
+      if (running) stopTimer();
+      else startTimer();
+    }
+
+    function resetTimer() {
+      stopTimer();
+      btnPlayText.textContent = "Iniciar Contagem";
+      btnPlayMaster.className = "st-btn st-btn-start";
+      buildInitialSchedule(true);
+    }
+
+    // Handlers para Recolher / Expandir
+    btnToggleCfg.addEventListener("click", () => {
+      const isHidden = cfgPanelWrapper.style.display === "none";
+      if (isHidden) {
+        cfgPanelWrapper.style.display = "block";
+        txtToggleCfg.textContent = "Ocultar Opções";
+        icoToggleCfg.textContent = "▲";
+        cfgHeader.classList.remove("collapsed-border");
+      } else {
+        cfgPanelWrapper.style.display = "none";
+        txtToggleCfg.textContent = "Exibir Opções";
+        icoToggleCfg.textContent = "▼";
+        cfgHeader.classList.add("collapsed-border");
+      }
+    });
+
+    btnToggleStages.addEventListener("click", () => {
+      const isHidden = stagesListWrapper.style.display === "none";
+      if (isHidden) {
+        stagesListWrapper.style.display = "block";
+        txtToggleStages.textContent = "Ocultar Etapas";
+        icoToggleStages.textContent = "▲";
+        stageCardHeader.classList.add("has-bottom-margin");
+      } else {
+        stagesListWrapper.style.display = "none";
+        txtToggleStages.textContent = "Exibir Etapas";
+        icoToggleStages.textContent = "▼";
+        stageCardHeader.classList.remove("has-bottom-margin");
+      }
+    });
+
+    // Eventos de Botões
+    btnPlayMaster.addEventListener("click", toggleTimer);
+    btnResetMaster.addEventListener("click", resetTimer);
+    btnMiniPlay1.addEventListener("click", toggleTimer);
+    btnMiniPlay2.addEventListener("click", toggleTimer);
+    btnMiniReset1.addEventListener("click", resetTimer);
+    btnMiniReset2.addEventListener("click", resetTimer);
+
+    btnGoIntro.addEventListener("click", goToIntroduction);
+    btnPrevPhase.addEventListener("click", returnToPrevStage);
+    btnNextPhase.addEventListener("click", () => advanceToNextStage(true));
+    btnManualCompensate.addEventListener("click", triggerManualCompensation);
+
+    btnAddMin.addEventListener("click", () => {
+      const stage = stages[currentStageIndex];
+      if (stage) {
+        stage.allocatedSec += 60;
+        totalTargetSec += 60;
+        updateDisplays();
+      }
+    });
+
+    btnSubMin.addEventListener("click", () => {
+      const stage = stages[currentStageIndex];
+      if (stage && stage.allocatedSec > 60) {
+        stage.allocatedSec -= 60;
+        totalTargetSec = Math.max(0, totalTargetSec - 60);
+        updateDisplays();
+      }
+    });
+
+    // Listeners de mudança de modelo e edição manual dos campos
+    selSessionPlan.addEventListener("change", applyPlanPreset);
+    selIntroMode.addEventListener("change", () => buildInitialSchedule(false));
+    selEnem.addEventListener("change", () => buildInitialSchedule(false));
+
+    [inpIntro, inpDev, inpOrient, inpExec, inpSoc, inpEnem, inpConcl].forEach(inp => {
+      inp.addEventListener("input", () => buildInitialSchedule(false));
+      inp.addEventListener("change", () => buildInitialSchedule(false));
+    });
+
+    selCutStrategy.addEventListener("change", updateDisplays);
+    chkAllowOvertime.addEventListener("change", updateDisplays);
+    chkAutoAdvance.addEventListener("change", updateDisplays);
+
+    // Inicializa com o padrão de 57 minutos
+    applyPlanPreset();
+  })();
+</script>
+</body>
+</html>
