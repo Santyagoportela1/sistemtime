@@ -74,7 +74,7 @@
     }
 
     .st-container {
-      max-width: 520px !important;
+      max-width: 540px !important;
       margin: 0 auto !important;
       display: flex !important;
       flex-direction: column !important;
@@ -100,6 +100,8 @@
       padding-bottom: 10px !important;
       margin-bottom: 12px !important;
       user-select: none !important;
+      flex-wrap: wrap !important;
+      gap: 8px !important;
     }
 
     .st-card-header.collapsed-border {
@@ -119,11 +121,12 @@
       gap: 8px !important;
     }
 
-    /* BOTÕES DE TOGGLE & TEMA */
+    /* BOTÕES DE TOGGLE, POPUP & TEMA */
     .st-header-actions {
       display: flex !important;
       align-items: center !important;
       gap: 6px !important;
+      flex-wrap: wrap !important;
     }
 
     .st-toggle-btn {
@@ -137,12 +140,55 @@
       border-radius: 6px !important;
       display: flex !important;
       align-items: center !important;
-      gap: 6px !important;
+      gap: 5px !important;
       transition: all 0.2s ease !important;
     }
     .st-toggle-btn:hover {
       background: var(--toggle-btn-hover) !important;
       filter: brightness(1.05) !important;
+    }
+
+    /* GRUPO POP-UP (SELETOR + BOTÃO) */
+    .st-pip-group {
+      display: flex !important;
+      align-items: center !important;
+      background: var(--input-bg) !important;
+      border: 1px solid #38bdf8 !important;
+      border-radius: 6px !important;
+      overflow: hidden !important;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25) !important;
+    }
+
+    .st-pip-select {
+      background: var(--input-bg) !important;
+      color: var(--text-main) !important;
+      border: none !important;
+      border-right: 1px solid var(--input-border) !important;
+      font-size: 11px !important;
+      font-weight: 600 !important;
+      padding: 5px 6px !important;
+      outline: none !important;
+      cursor: pointer !important;
+    }
+
+    .st-pip-btn {
+      background: linear-gradient(135deg, #0284c7, #2563eb) !important;
+      border: none !important;
+      color: #ffffff !important;
+      font-size: 11px !important;
+      font-weight: 700 !important;
+      cursor: pointer !important;
+      padding: 5px 10px !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 5px !important;
+      transition: all 0.2s ease !important;
+    }
+    .st-pip-btn:hover {
+      filter: brightness(1.12) !important;
+    }
+    .st-pip-btn.active-pip {
+      background: linear-gradient(135deg, #059669, #10b981) !important;
     }
 
     .st-theme-btn {
@@ -245,6 +291,14 @@
       cursor: not-allowed !important;
     }
 
+    /* CAIXA DE DESTAQUE CONDICIONAL */
+    .st-highlight-box {
+      background: rgba(56, 189, 248, 0.06) !important;
+      border: 1px dashed rgba(56, 189, 248, 0.35) !important;
+      border-radius: 8px !important;
+      padding: 8px 10px !important;
+    }
+
     .st-check-row {
       display: flex !important;
       align-items: center !important;
@@ -275,7 +329,7 @@
       margin-top: 10px !important;
       padding: 10px 12px !important;
       background: rgba(56, 189, 248, 0.08) !important;
-      border: 1px solid rgba(56, 189, 248, 0.2) !important;
+      border: 1px solid rgba(56, 189, 248, 0.25) !important;
       border-radius: 8px !important;
       font-size: 11px !important;
       color: var(--toggle-btn-color) !important;
@@ -283,9 +337,33 @@
     }
 
     .st-summary-badge.alert-cut {
-      background: rgba(245, 158, 11, 0.1) !important;
-      border-color: rgba(245, 158, 11, 0.3) !important;
-      color: #fcd34d !important;
+      background: rgba(245, 158, 11, 0.12) !important;
+      border-color: rgba(245, 158, 11, 0.4) !important;
+      color: #fbbf24 !important;
+    }
+
+    .st-summary-badge.alert-error {
+      background: rgba(239, 68, 68, 0.14) !important;
+      border-color: rgba(239, 68, 68, 0.5) !important;
+      color: #f87171 !important;
+    }
+
+    .st-auto-balance-btn {
+      margin-top: 6px !important;
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border: none !important;
+      border-radius: 6px !important;
+      padding: 5px 10px !important;
+      font-size: 11px !important;
+      font-weight: 700 !important;
+      cursor: pointer !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 4px !important;
+    }
+    .st-auto-balance-btn:hover {
+      background: #0369a1 !important;
     }
 
     /* BOTÕES */
@@ -401,8 +479,8 @@
     }
 
     .snap-sys-btn {
-      width: 18px !important;
-      height: 18px !important;
+      width: 20px !important;
+      height: 20px !important;
       font-size: 10px !important;
       display: flex !important;
       align-items: center !important;
@@ -416,6 +494,7 @@
       transition: all 0.2s ease !important;
     }
     .snap-sys-btn:hover { background: #475569 !important; color: #fff !important; }
+    .snap-sys-btn.popout-single:hover { background: #0284c7 !important; color: #fff !important; }
     .snap-sys-btn.close:hover { background: #ef4444 !important; color: #fff !important; }
 
     .snap-controls-bar {
@@ -624,11 +703,24 @@
           <span>Painel de Gravação</span>
         </div>
         <div class="st-header-actions">
+          <!-- CONTROLE DO POP-UP: PADRÃO OS DOIS + OPÇÃO DE ESCOLHER APENAS UM -->
+          <div class="st-pip-group" title="Escolha o que exibir na janela flutuante">
+            <select id="selPipMode" class="st-pip-select" aria-label="Modo do Pop-up">
+              <option value="both" selected>Os 2 (Padrão)</option>
+              <option value="phase">Só Fase (Amarelo)</option>
+              <option value="total">Só Total (Vermelho)</option>
+            </select>
+            <button type="button" id="btnPopoutPip" class="st-pip-btn">
+              <span>🪟</span>
+              <span id="txtPopoutPip">Pop-up</span>
+            </button>
+          </div>
+
           <button type="button" id="btnThemeToggle" class="st-theme-btn" title="Alternar entre Tema Claro e Escuro">
             <span id="icoTheme">☀️</span>
           </button>
           <button type="button" id="btnToggleCfg" class="st-toggle-btn" title="Alternar visibilidade das configurações">
-            <span id="txtToggleCfg">Ocultar Opções</span>
+            <span id="txtToggleCfg">Ocultar</span>
             <span id="icoToggleCfg">▲</span>
           </button>
         </div>
@@ -638,11 +730,12 @@
       <div id="cfgPanelWrapper">
         <div id="cfgPanel" class="st-grid-2">
           <div class="st-field">
-            <label for="selSessionPlan">Modelo de Aula (Predefinição):</label>
+            <label for="selSessionPlan">Modelo / Grade da Aula:</label>
             <select id="selSessionPlan">
               <option value="42">42 minutos (Grade Curta)</option>
               <option value="57" selected>57 minutos (Grade Padrão)</option>
               <option value="60">60 minutos (Grade Estendida)</option>
+              <option value="custom">✍️ Tempo Personalizado (Fora da Grade)</option>
             </select>
           </div>
 
@@ -654,6 +747,15 @@
             </select>
           </div>
 
+          <!-- CAMPO CONDICIONAL: TEMPO TOTAL PERSONALIZADO -->
+          <div class="st-field full st-highlight-box" id="boxCustomTotal" style="display: none;">
+            <label for="inpCustomTotal">
+              <span>⏱️ Tempo Total Desejado da Aula (minutos):</span>
+              <span class="st-badge-default">Cálculo Automático</span>
+            </label>
+            <input type="number" id="inpCustomTotal" min="5" max="300" value="50">
+          </div>
+
           <!-- 1. INTRODUÇÃO -->
           <div class="st-field">
             <label for="inpIntro">1. Introdução (min):</label>
@@ -663,7 +765,7 @@
           <!-- 2. DESENVOLVIMENTO -->
           <div class="st-field">
             <label for="inpDev">2. Desenvolvimento (min):</label>
-            <input type="number" id="inpDev" min="0" max="90" value="32">
+            <input type="number" id="inpDev" min="0" max="180" value="32">
           </div>
 
           <!-- 3. ORIENTAÇÃO (PADRÃO EDITÁVEL) -->
@@ -672,7 +774,7 @@
               <span>3. Orientação (min):</span>
               <span class="st-badge-default">Padrão: 2</span>
             </label>
-            <input type="number" id="inpOrient" min="0" max="30" value="2">
+            <input type="number" id="inpOrient" min="0" max="60" value="2">
           </div>
 
           <!-- 4. EXECUÇÃO -->
@@ -692,7 +794,19 @@
             <label for="selEnem">6. Terá Minuto ENEM?</label>
             <select id="selEnem">
               <option value="sim" selected>Sim (Ativo)</option>
-              <option value="nao">Não (+tempo na Socialização)</option>
+              <option value="nao">Não (Redistribuir tempo)</option>
+            </select>
+          </div>
+
+          <!-- CAMPO CONDICIONAL: PARA ONDE VAI O TEMPO DO MINUTO ENEM -->
+          <div class="st-field full st-highlight-box" id="boxEnemRedirect" style="display: none;">
+            <label for="selEnemRedirect">
+              <span>🔀 Para onde vai o tempo do Minuto ENEM?</span>
+              <span class="st-badge-default">Sem Minuto ENEM</span>
+            </label>
+            <select id="selEnemRedirect">
+              <option value="dev" selected>Somar ao Desenvolvimento (+3 min)</option>
+              <option value="soc">Somar à Socialização (+3 min)</option>
             </select>
           </div>
 
@@ -710,7 +824,7 @@
               <span>7. Conclusão (min):</span>
               <span class="st-badge-default">Padrão: 4</span>
             </label>
-            <input type="number" id="inpConcl" min="0" max="30" value="4">
+            <input type="number" id="inpConcl" min="0" max="60" value="4">
           </div>
 
           <div class="st-field full">
@@ -797,7 +911,7 @@
         </div>
         <div class="snap-sys-btns">
           <button type="button" class="snap-sys-btn">_</button>
-          <button type="button" class="snap-sys-btn">□</button>
+          <button type="button" class="snap-sys-btn popout-single" id="btnPopSinglePhase" title="Destacar apenas este cronômetro (Fase Atual) em Pop-up">❐</button>
           <button type="button" class="snap-sys-btn close">✕</button>
         </div>
       </div>
@@ -829,7 +943,7 @@
         </div>
         <div class="snap-sys-btns">
           <button type="button" class="snap-sys-btn">_</button>
-          <button type="button" class="snap-sys-btn">□</button>
+          <button type="button" class="snap-sys-btn popout-single" id="btnPopSingleTotal" title="Destacar apenas este cronômetro (Tempo Total) em Pop-up">❐</button>
           <button type="button" class="snap-sys-btn close">✕</button>
         </div>
       </div>
@@ -879,6 +993,9 @@
     let currentStageIndex = 0;
     let totalDeductedSoFar = 0;
 
+    // Referência da janela flutuante (Document PiP ou Popup clássico)
+    let pipWindowRef = null;
+
     let audioCtx = null;
     function playBeep(freq = 880, type = 'sine', duration = 0.25) {
       if (!chkAudioAlert.checked) return;
@@ -913,17 +1030,26 @@
     const outerWrapper = document.getElementById("outerWrapper");
     const btnThemeToggle = document.getElementById("btnThemeToggle");
     const icoTheme = document.getElementById("icoTheme");
+    const selPipMode = document.getElementById("selPipMode");
+    const btnPopoutPip = document.getElementById("btnPopoutPip");
+    const txtPopoutPip = document.getElementById("txtPopoutPip");
+    const btnPopSinglePhase = document.getElementById("btnPopSinglePhase");
+    const btnPopSingleTotal = document.getElementById("btnPopSingleTotal");
 
     const selSessionPlan = document.getElementById("selSessionPlan");
     const selIntroMode = document.getElementById("selIntroMode");
+    const boxCustomTotal = document.getElementById("boxCustomTotal");
+    const inpCustomTotal = document.getElementById("inpCustomTotal");
 
-    // Inputs numéricos das 7 etapas (todos editáveis, inclusive os padrões)
+    // Inputs numéricos das 7 etapas
     const inpIntro = document.getElementById("inpIntro");
     const inpDev = document.getElementById("inpDev");
     const inpOrient = document.getElementById("inpOrient");
     const inpExec = document.getElementById("inpExec");
     const inpSoc = document.getElementById("inpSoc");
     const selEnem = document.getElementById("selEnem");
+    const boxEnemRedirect = document.getElementById("boxEnemRedirect");
+    const selEnemRedirect = document.getElementById("selEnemRedirect");
     const inpEnem = document.getElementById("inpEnem");
     const inpConcl = document.getElementById("inpConcl");
 
@@ -991,11 +1117,7 @@
 
     function toggleTheme() {
       const currentTheme = outerWrapper.getAttribute('data-theme');
-      if (currentTheme === 'light') {
-        setTheme('dark');
-      } else {
-        setTheme('light');
-      }
+      setTheme(currentTheme === 'light' ? 'dark' : 'light');
     }
 
     const savedTheme = localStorage.getItem('snaptimer_theme') || 'dark';
@@ -1018,64 +1140,106 @@
       return `${isNeg ? '-' : ''}${String(m).padStart(2, '0')}`;
     }
 
-    // APLICA OS VALORES PADRÃO CONFORME A GRADE ESCOLHIDA (42, 57 OU 60 MIN)
-    function applyPlanPreset() {
-      const plan = parseInt(selSessionPlan.value, 10);
-      if (plan === 42) {
-        // 4 + 21 + 2 + 4 + 4 + 3 + 4 = 42 min
-        inpIntro.value = 4;
-        inpDev.value = 21;
-        inpOrient.value = 2;
-        inpExec.value = 4;
-        inpSoc.value = 4;
-        inpEnem.value = 3;
-        inpConcl.value = 4;
-      } else if (plan === 57) {
-        // 5 + 32 + 2 + 5 + 5 + 3 + 4 = 56 min (ou 57 com ajuste fino; mantém 4 padrão na conclusão e soma total exata)
-        inpIntro.value = 5;
-        inpDev.value = 32;
-        inpOrient.value = 2;
-        inpExec.value = 5;
-        inpSoc.value = 5;
-        inpEnem.value = 3;
-        inpConcl.value = 4;
-      } else if (plan === 60) {
-        // Base 57 + 3 min extras na Conclusão (total 60 min, todos editáveis)
-        inpIntro.value = 5;
-        inpDev.value = 32;
-        inpOrient.value = 2;
-        inpExec.value = 5;
-        inpSoc.value = 5;
-        inpEnem.value = 3;
-        inpConcl.value = 8;
-      }
-      buildInitialSchedule(false);
-    }
-
     function readSafeInt(inputEl, fallback = 0) {
       const val = parseInt(inputEl.value, 10);
       return isNaN(val) || val < 0 ? fallback : val;
     }
 
+    function autoCalculateDevelopmentForTarget(targetMin) {
+      const introMode = selIntroMode.value;
+      const introMin = introMode === "include_add" ? readSafeInt(inpIntro, 0) : 0;
+      const orientMin = readSafeInt(inpOrient, 2);
+      const execMin = readSafeInt(inpExec, 4);
+      const socMin = readSafeInt(inpSoc, 4);
+      const enemMin = readSafeInt(inpEnem, 3);
+      const conclMin = readSafeInt(inpConcl, 4);
+
+      const fixedSum = introMin + orientMin + execMin + socMin + enemMin + conclMin;
+      const calcDev = targetMin - fixedSum;
+      inpDev.value = calcDev >= 0 ? calcDev : 0;
+    }
+
+    function applyPlanPreset() {
+      const planVal = selSessionPlan.value;
+
+      if (planVal === "custom") {
+        boxCustomTotal.style.display = "flex";
+        const targetCustom = readSafeInt(inpCustomTotal, 50);
+        if (readSafeInt(inpIntro, 0) === 0) inpIntro.value = 4;
+        inpOrient.value = 2;
+        if (readSafeInt(inpExec, 0) === 0) inpExec.value = 4;
+        if (readSafeInt(inpSoc, 0) === 0) inpSoc.value = 4;
+        inpEnem.value = 3;
+        inpConcl.value = 4;
+        autoCalculateDevelopmentForTarget(targetCustom);
+      } else {
+        boxCustomTotal.style.display = "none";
+        const plan = parseInt(planVal, 10);
+        if (plan === 42) {
+          inpIntro.value = 4;
+          inpDev.value = 21;
+          inpOrient.value = 2;
+          inpExec.value = 4;
+          inpSoc.value = 4;
+          inpEnem.value = 3;
+          inpConcl.value = 4;
+        } else if (plan === 57) {
+          inpIntro.value = 5;
+          inpDev.value = 32;
+          inpOrient.value = 2;
+          inpExec.value = 5;
+          inpSoc.value = 5;
+          inpEnem.value = 3;
+          inpConcl.value = 4;
+        } else if (plan === 60) {
+          inpIntro.value = 5;
+          inpDev.value = 32;
+          inpOrient.value = 2;
+          inpExec.value = 5;
+          inpSoc.value = 5;
+          inpEnem.value = 3;
+          inpConcl.value = 8;
+        }
+      }
+      buildInitialSchedule(false);
+    }
+
+    function getDesiredTargetMinutes() {
+      const planVal = selSessionPlan.value;
+      if (planVal === "custom") {
+        return readSafeInt(inpCustomTotal, 50);
+      }
+      return parseInt(planVal, 10);
+    }
+
     function buildInitialSchedule(resetProgress = true) {
       const introMin = readSafeInt(inpIntro, 0);
       const introMode = selIntroMode.value;
-      const devMin = readSafeInt(inpDev, 0);
+      const devBaseMin = readSafeInt(inpDev, 0);
       const orientMin = readSafeInt(inpOrient, 2);
       const execMin = readSafeInt(inpExec, 0);
       const socBaseMin = readSafeInt(inpSoc, 0);
       const hasEnem = selEnem.value === "sim";
+      const enemRedirect = selEnemRedirect.value;
       const enemMin = readSafeInt(inpEnem, 3);
       const conclMin = readSafeInt(inpConcl, 4);
 
-      inpEnem.disabled = !hasEnem;
+      boxEnemRedirect.style.display = hasEnem ? "none" : "flex";
+      inpEnem.disabled = false;
 
-      // Se não tiver Minuto ENEM, o tempo dele (padrão 3 min) vai para a Socialização
-      const effectiveSocMin = socBaseMin + (hasEnem ? 0 : enemMin);
+      let effectiveDevMin = devBaseMin;
+      let effectiveSocMin = socBaseMin;
+
+      if (!hasEnem && enemMin > 0) {
+        if (enemRedirect === "dev") {
+          effectiveDevMin += enemMin;
+        } else {
+          effectiveSocMin += enemMin;
+        }
+      }
 
       let calculatedStages = [];
 
-      // 1. INTRODUÇÃO
       if (introMode === "include_add" && introMin > 0) {
         calculatedStages.push({
           id: 'intro',
@@ -1086,18 +1250,19 @@
         });
       }
 
-      // 2. DESENVOLVIMENTO
-      if (devMin > 0) {
+      if (effectiveDevMin > 0) {
+        const devLabel = (!hasEnem && enemRedirect === "dev" && enemMin > 0)
+          ? `Desenvolvimento (+${enemMin}m ENEM)`
+          : "Desenvolvimento";
         calculatedStages.push({
           id: 'dev',
-          name: "Desenvolvimento",
-          originalSec: devMin * 60,
-          allocatedSec: devMin * 60,
+          name: devLabel,
+          originalSec: effectiveDevMin * 60,
+          allocatedSec: effectiveDevMin * 60,
           elapsedSec: 0
         });
       }
 
-      // 3. ORIENTAÇÃO
       if (orientMin > 0) {
         calculatedStages.push({
           id: 'orient',
@@ -1108,7 +1273,6 @@
         });
       }
 
-      // 4. EXECUÇÃO
       if (execMin > 0) {
         calculatedStages.push({
           id: 'exec',
@@ -1119,18 +1283,19 @@
         });
       }
 
-      // 5. SOCIALIZAÇÃO
       if (effectiveSocMin > 0) {
+        const socLabel = (!hasEnem && enemRedirect === "soc" && enemMin > 0)
+          ? `Socialização (+${enemMin}m ENEM)`
+          : "Socialização";
         calculatedStages.push({
           id: 'soc',
-          name: hasEnem ? "Socialização" : `Socialização (+${enemMin}m ENEM)`,
+          name: socLabel,
           originalSec: effectiveSocMin * 60,
           allocatedSec: effectiveSocMin * 60,
           elapsedSec: 0
         });
       }
 
-      // 6. MINUTO ENEM (QUANDO TEM)
       if (hasEnem && enemMin > 0) {
         calculatedStages.push({
           id: 'enem',
@@ -1141,7 +1306,6 @@
         });
       }
 
-      // 7. CONCLUSÃO
       if (conclMin > 0) {
         calculatedStages.push({
           id: 'concl',
@@ -1152,7 +1316,6 @@
         });
       }
 
-      // Soma dinâmica real das etapas ativas (garante 100% de precisão mesmo quando o usuário edita qualquer campo)
       totalTargetSec = calculatedStages.reduce((sum, s) => sum + s.allocatedSec, 0);
       stages = calculatedStages;
 
@@ -1171,18 +1334,46 @@
     }
 
     function renderSummaryBadge(totalMin, conclMin, introMin, introMode) {
+      const desiredMin = getDesiredTargetMinutes();
+      const diffMin = desiredMin - totalMin;
+
       const modeText = introMode === "include_add" 
-        ? `Introdução: <strong>${introMin} min (incluída)</strong>` 
+        ? `Introdução: <strong>${introMin}m</strong>` 
         : `Introdução: <strong>descontada</strong>`;
 
-      summaryBadge.innerHTML = `
-        Soma das Etapas: <strong>${totalMin} min</strong> | 
-        ${modeText} | 
-        Conclusão: <strong>${conclMin} min</strong>
+      let html = `
+        Soma Atual: <strong>${totalMin} min</strong> (Meta: <strong>${desiredMin} min</strong>) | 
+        ${modeText}
       `;
-      summaryBadge.className = totalDeductedSoFar > 0 ? "st-summary-badge alert-cut" : "st-summary-badge";
+
+      if (diffMin !== 0) {
+        if (diffMin > 0) {
+          summaryBadge.className = "st-summary-badge alert-cut";
+          html += `<br>⚠️ <strong>Faltam ${diffMin} min</strong> para atingir a meta de ${desiredMin} min. 
+          <button type="button" class="st-auto-balance-btn" id="btnAutoFixDiff">✨ Completar +${diffMin}m no Desenvolvimento</button>`;
+        } else {
+          const excess = Math.abs(diffMin);
+          summaryBadge.className = "st-summary-badge alert-error";
+          html += `<br>🚨 <strong>Atenção: Faltam ${excess} min no tempo total</strong> (as etapas somam ${totalMin} min, passando ${excess} min da meta de ${desiredMin} min). Reduza etapas ou aumente o tempo total.`;
+        }
+      } else {
+        summaryBadge.className = totalDeductedSoFar > 0 ? "st-summary-badge alert-cut" : "st-summary-badge";
+        html += ` | ✅ <strong>Grade fechada com precisão!</strong>`;
+      }
+
       if (totalDeductedSoFar > 0) {
-        summaryBadge.innerHTML += ` | <span style="color:#f87171;font-weight:700;">✂ ${Math.round(totalDeductedSoFar)}s compensados!</span>`;
+        html += ` | <span style="color:#f87171;font-weight:700;">✂ ${Math.round(totalDeductedSoFar)}s compensados!</span>`;
+      }
+
+      summaryBadge.innerHTML = html;
+
+      const btnAutoFixDiff = document.getElementById("btnAutoFixDiff");
+      if (btnAutoFixDiff) {
+        btnAutoFixDiff.addEventListener("click", () => {
+          const currentDev = readSafeInt(inpDev, 0);
+          inpDev.value = currentDev + diffMin;
+          buildInitialSchedule(false);
+        });
       }
     }
 
@@ -1236,6 +1427,395 @@
       return totalCutApplied;
     }
 
+    // =========================================================================
+    // JANELA FLUTUANTE / POP-UP ESTILO YOUTUBE (VISUAL IDÊNTICO AO DA IMAGEM)
+    // =========================================================================
+    function applyPipLayoutVisibility() {
+      if (!pipWindowRef || pipWindowRef.closed) return;
+      const doc = pipWindowRef.document;
+      const boxPhase = doc.getElementById("pipWinPhase");
+      const boxTotal = doc.getElementById("pipWinTotal");
+      const mode = selPipMode.value; // 'both', 'phase', 'total'
+
+      if (boxPhase && boxTotal) {
+        boxPhase.style.display = (mode === "both" || mode === "phase") ? "block" : "none";
+        boxTotal.style.display = (mode === "both" || mode === "total") ? "block" : "none";
+      }
+    }
+
+    function syncPipWindow() {
+      if (!pipWindowRef || pipWindowRef.closed) {
+        pipWindowRef = null;
+        btnPopoutPip.classList.remove("active-pip");
+        txtPopoutPip.textContent = "Pop-up";
+        return;
+      }
+
+      const doc = pipWindowRef.document;
+      const pipPhaseTitle = doc.getElementById("pipPhaseTitle");
+      const pipMinPhase = doc.getElementById("pipMinPhase");
+      const pipDispPhase = doc.getElementById("pipDispPhase");
+      const pipWinPhase = doc.getElementById("pipWinPhase");
+      const pipTagOverPhase = doc.getElementById("pipTagOverPhase");
+
+      const pipTotalStatus = doc.getElementById("pipTotalStatus");
+      const pipMinTotal = doc.getElementById("pipMinTotal");
+      const pipDispTotal = doc.getElementById("pipDispTotal");
+      const pipWinTotal = doc.getElementById("pipWinTotal");
+      const pipTagOverTotal = doc.getElementById("pipTagOverTotal");
+
+      const pipPlay1 = doc.getElementById("pipPlay1");
+      const pipPlay2 = doc.getElementById("pipPlay2");
+      const pipBtnPlayMain = doc.getElementById("pipBtnPlayMain");
+
+      if (!pipPhaseTitle) return;
+
+      const remainingTotalSec = totalTargetSec - elapsedSec;
+      const isTotalOver = remainingTotalSec < 0;
+
+      pipDispTotal.textContent = formatTimeWithSign(remainingTotalSec);
+      pipMinTotal.textContent = formatMinutesOnly(remainingTotalSec);
+      if (isTotalOver) {
+        pipWinTotal.classList.add("in-overtime");
+        pipDispTotal.classList.add("is-negative");
+        pipTagOverTotal.style.display = "inline-block";
+        pipTotalStatus.textContent = "GRAVAÇÃO ESTOURADA";
+      } else {
+        pipWinTotal.classList.remove("in-overtime");
+        pipDispTotal.classList.remove("is-negative");
+        pipTagOverTotal.style.display = "none";
+        pipTotalStatus.textContent = "Tempo Total de Gravação";
+      }
+
+      const stage = stages[currentStageIndex];
+      if (stage) {
+        const remStage = stage.allocatedSec - stage.elapsedSec;
+        const isStageOver = remStage < 0;
+        pipPhaseTitle.textContent = stage.name;
+        pipMinPhase.textContent = formatMinutesOnly(remStage);
+        pipDispPhase.textContent = formatTimeWithSign(remStage);
+
+        if (isStageOver) {
+          pipWinPhase.classList.add("in-overtime");
+          pipDispPhase.classList.add("is-negative");
+          pipTagOverPhase.style.display = "inline-block";
+        } else {
+          pipWinPhase.classList.remove("in-overtime");
+          pipDispPhase.classList.remove("is-negative");
+          pipTagOverPhase.style.display = "none";
+        }
+      } else {
+        pipPhaseTitle.textContent = "Gravação Finalizada";
+        pipMinPhase.textContent = "00";
+        pipDispPhase.textContent = "00:00:00";
+      }
+
+      const playIcon = running ? "⏸" : "▶";
+      if (pipPlay1) pipPlay1.textContent = playIcon;
+      if (pipPlay2) pipPlay2.textContent = playIcon;
+      if (pipBtnPlayMain) {
+        pipBtnPlayMain.textContent = running ? "⏸ Pausar" : "▶ Iniciar";
+        pipBtnPlayMain.style.background = running ? "#d97706" : "#059669";
+      }
+    }
+
+    function populatePipDocument(targetWin) {
+      const doc = targetWin.document;
+      doc.open();
+      doc.write(`
+        <!DOCTYPE html>
+        <html lang="pt-BR">
+        <head>
+          <meta charset="UTF-8">
+          <title>SnapTimer - Retorno Estúdio</title>
+          <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+          <style>
+            * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+            body {
+              background: #090d16;
+              color: #f1f5f9;
+              padding: 10px;
+              display: flex;
+              flex-direction: column;
+              gap: 10px;
+              user-select: none;
+            }
+            .snap-window {
+              background: #131b2e;
+              border: 1px solid #1e293b;
+              box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+              border-radius: 12px;
+              overflow: hidden;
+            }
+            .snap-window.in-overtime {
+              border-color: #ef4444;
+              box-shadow: 0 0 18px rgba(239, 68, 68, 0.35);
+            }
+            .snap-titlebar {
+              background: #182238;
+              border-bottom: 1px solid #1e293b;
+              padding: 6px 12px;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            }
+            .snap-window.in-overtime .snap-titlebar {
+              background: #2a1215;
+              border-bottom-color: #7f1d1d;
+            }
+            .snap-title-text {
+              display: flex;
+              align-items: center;
+              gap: 6px;
+              font-size: 12px;
+              color: #f1f5f9;
+              font-weight: 600;
+            }
+            .snap-overtime-tag {
+              display: none;
+              background: #ef4444;
+              color: #ffffff;
+              font-size: 9px;
+              font-weight: 800;
+              padding: 2px 5px;
+              border-radius: 4px;
+            }
+            .snap-controls-bar {
+              background: #0d1322;
+              border-bottom: 1px solid #1e293b;
+              padding: 6px 12px;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              font-size: 11px;
+              color: #94a3b8;
+            }
+            .snap-minutes-group {
+              display: flex;
+              align-items: center;
+              gap: 6px;
+              font-weight: 500;
+            }
+            .snap-input-box {
+              width: 40px;
+              height: 22px;
+              background: #182238;
+              border: 1px solid #334155;
+              border-radius: 4px;
+              text-align: center;
+              font-family: 'JetBrains Mono', monospace;
+              font-size: 11px;
+              line-height: 20px;
+              font-weight: 700;
+              color: #38bdf8;
+            }
+            .snap-action-btns {
+              display: flex;
+              align-items: center;
+              gap: 6px;
+            }
+            .snap-round-btn {
+              width: 24px;
+              height: 24px;
+              border-radius: 6px;
+              border: 1px solid #334155;
+              background: #131b2e;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 10px;
+              cursor: pointer;
+              color: #f1f5f9;
+            }
+            .snap-round-btn:hover { background: #38bdf8; color: #0f172a; }
+            .snap-display {
+              font-family: 'JetBrains Mono', monospace;
+              font-weight: 700;
+              font-size: 46px;
+              line-height: 1.1;
+              letter-spacing: -1.5px;
+              text-align: center;
+              padding: 12px 6px;
+              margin: 8px;
+              border-radius: 8px;
+              background: #030712;
+              border: 1px solid #1f2937;
+            }
+            .display-yellow {
+              color: #facc15;
+              text-shadow: 0 0 12px rgba(250, 204, 21, 0.3);
+            }
+            .display-red {
+              color: #f87171;
+              text-shadow: 0 0 12px rgba(248, 113, 113, 0.3);
+            }
+            .snap-display.is-negative {
+              color: #ef4444;
+              text-shadow: 0 0 16px rgba(239, 68, 68, 0.6);
+            }
+            .pip-footer-nav {
+              display: grid;
+              grid-template-columns: 1fr 1.4fr 1fr;
+              gap: 6px;
+            }
+            .nav-btn {
+              border: none;
+              border-radius: 6px;
+              padding: 7px 6px;
+              font-size: 11px;
+              font-weight: 700;
+              color: #fff;
+              cursor: pointer;
+            }
+            .nav-btn:active { transform: scale(0.97); }
+          </style>
+        </head>
+        <body>
+          <!-- JANELA AMARELA: FASE ATUAL -->
+          <div class="snap-window" id="pipWinPhase">
+            <div class="snap-titlebar">
+              <div class="snap-title-text">
+                <span>⏱️</span>
+                <span>SnapTimer - <strong id="pipPhaseTitle">Introdução</strong></span>
+                <span class="snap-overtime-tag" id="pipTagOverPhase">ESTOURO</span>
+              </div>
+            </div>
+            <div class="snap-controls-bar">
+              <div class="snap-minutes-group">
+                <span>Restante:</span>
+                <div class="snap-input-box" id="pipMinPhase">05</div>
+                <span>min</span>
+              </div>
+              <div class="snap-action-btns">
+                <button type="button" class="snap-round-btn" id="pipPlay1">▶</button>
+                <button type="button" class="snap-round-btn" id="pipReset1">■</button>
+              </div>
+            </div>
+            <div id="pipDispPhase" class="snap-display display-yellow">00:05:00</div>
+          </div>
+
+          <!-- JANELA VERMELHA: TEMPO TOTAL -->
+          <div class="snap-window" id="pipWinTotal">
+            <div class="snap-titlebar">
+              <div class="snap-title-text">
+                <span>🎬</span>
+                <span>SnapTimer - <strong id="pipTotalStatus">Tempo Total de Gravação</strong></span>
+                <span class="snap-overtime-tag" id="pipTagOverTotal">ESTOURADA</span>
+              </div>
+            </div>
+            <div class="snap-controls-bar">
+              <div class="snap-minutes-group">
+                <span>Restante:</span>
+                <div class="snap-input-box" id="pipMinTotal">57</div>
+                <span>min</span>
+              </div>
+              <div class="snap-action-btns">
+                <button type="button" class="snap-round-btn" id="pipPlay2">▶</button>
+                <button type="button" class="snap-round-btn" id="pipReset2">■</button>
+              </div>
+            </div>
+            <div id="pipDispTotal" class="snap-display display-red">00:57:00</div>
+          </div>
+
+          <!-- BARRA RÁPIDA DE CONTROLE DE ETAPA -->
+          <div class="pip-footer-nav">
+            <button type="button" class="nav-btn" id="pipBtnPrev" style="background:#475569;">◀ Anterior</button>
+            <button type="button" class="nav-btn" id="pipBtnPlayMain" style="background:#059669;">▶ Iniciar</button>
+            <button type="button" class="nav-btn" id="pipBtnNext" style="background:#2563eb;">Próxima ▶</button>
+          </div>
+        </body>
+        </html>
+      `);
+      doc.close();
+
+      doc.getElementById("pipPlay1").addEventListener("click", toggleTimer);
+      doc.getElementById("pipPlay2").addEventListener("click", toggleTimer);
+      doc.getElementById("pipReset1").addEventListener("click", resetTimer);
+      doc.getElementById("pipReset2").addEventListener("click", resetTimer);
+      doc.getElementById("pipBtnPlayMain").addEventListener("click", toggleTimer);
+      doc.getElementById("pipBtnPrev").addEventListener("click", returnToPrevStage);
+      doc.getElementById("pipBtnNext").addEventListener("click", () => advanceToNextStage(true));
+
+      targetWin.addEventListener("pagehide", () => {
+        pipWindowRef = null;
+        btnPopoutPip.classList.remove("active-pip");
+        txtPopoutPip.textContent = "Pop-up";
+      });
+
+      applyPipLayoutVisibility();
+    }
+
+    async function openPopoutWithMode(modeOverride = null) {
+      if (modeOverride) {
+        selPipMode.value = modeOverride;
+      }
+
+      const mode = selPipMode.value;
+      const targetHeight = mode === "both" ? 395 : 225;
+
+      // Se já estiver aberta, apenas atualiza o modo e redimensiona se possível
+      if (pipWindowRef && !pipWindowRef.closed) {
+        applyPipLayoutVisibility();
+        syncPipWindow();
+        try {
+          pipWindowRef.resizeTo(380, targetHeight);
+          pipWindowRef.focus();
+        } catch (e) {}
+        return;
+      }
+
+      try {
+        if ("documentPictureInPicture" in window) {
+          pipWindowRef = await window.documentPictureInPicture.requestWindow({
+            width: 370,
+            height: targetHeight
+          });
+          populatePipDocument(pipWindowRef);
+          btnPopoutPip.classList.add("active-pip");
+          txtPopoutPip.textContent = "Fechar Pop-up";
+          syncPipWindow();
+          return;
+        }
+      } catch (err) {
+        console.warn("Document PiP indisponível neste contexto, usando janela pop-up padrão:", err);
+      }
+
+      pipWindowRef = window.open("", "SnapTimerPopout", `width=385,height=${targetHeight + 25},menubar=no,toolbar=no,location=no,status=no,resizable=yes`);
+      if (pipWindowRef) {
+        populatePipDocument(pipWindowRef);
+        btnPopoutPip.classList.add("active-pip");
+        txtPopoutPip.textContent = "Fechar Pop-up";
+        syncPipWindow();
+      } else {
+        alert("O navegador bloqueou a janela pop-up. Permita pop-ups para este site no ícone da barra de endereços.");
+      }
+    }
+
+    btnPopoutPip.addEventListener("click", () => {
+      if (pipWindowRef && !pipWindowRef.closed) {
+        pipWindowRef.close();
+        pipWindowRef = null;
+        btnPopoutPip.classList.remove("active-pip");
+        txtPopoutPip.textContent = "Pop-up";
+      } else {
+        openPopoutWithMode();
+      }
+    });
+
+    // Ao mudar o seletor (Os 2 / Só Fase / Só Total) com o pop-up já aberto, atualiza na hora
+    selPipMode.addEventListener("change", () => {
+      if (pipWindowRef && !pipWindowRef.closed) {
+        openPopoutWithMode(selPipMode.value);
+      }
+    });
+
+    // Botões individuais nas barras de título de cada janela (❐)
+    btnPopSinglePhase.addEventListener("click", () => openPopoutWithMode("phase"));
+    btnPopSingleTotal.addEventListener("click", () => openPopoutWithMode("total"));
+
+    // =========================================================================
+    // ATUALIZAÇÃO DOS DISPLAYS PRINCIPAIS
+    // =========================================================================
     function updateDisplays() {
       const remainingTotalSec = totalTargetSec - elapsedSec;
       const isTotalOvertime = remainingTotalSec < 0;
@@ -1285,6 +1865,7 @@
       }
 
       renderStagesList();
+      syncPipWindow();
     }
 
     function renderStagesList() {
@@ -1427,6 +2008,7 @@
       btnPlayMaster.className = "st-btn st-btn-pause";
       btnMiniPlay1.textContent = "⏸";
       btnMiniPlay2.textContent = "⏸";
+      syncPipWindow();
     }
 
     function stopTimer() {
@@ -1437,6 +2019,7 @@
       btnPlayMaster.className = "st-btn st-btn-start";
       btnMiniPlay1.textContent = "▶";
       btnMiniPlay2.textContent = "▶";
+      syncPipWindow();
     }
 
     function toggleTimer() {
@@ -1456,12 +2039,12 @@
       const isHidden = cfgPanelWrapper.style.display === "none";
       if (isHidden) {
         cfgPanelWrapper.style.display = "block";
-        txtToggleCfg.textContent = "Ocultar Opções";
+        txtToggleCfg.textContent = "Ocultar";
         icoToggleCfg.textContent = "▲";
         cfgHeader.classList.remove("collapsed-border");
       } else {
         cfgPanelWrapper.style.display = "none";
-        txtToggleCfg.textContent = "Exibir Opções";
+        txtToggleCfg.textContent = "Opções";
         icoToggleCfg.textContent = "▼";
         cfgHeader.classList.add("collapsed-border");
       }
@@ -1513,10 +2096,19 @@
       }
     });
 
-    // Listeners de mudança de modelo e edição manual dos campos
     selSessionPlan.addEventListener("change", applyPlanPreset);
-    selIntroMode.addEventListener("change", () => buildInitialSchedule(false));
+    inpCustomTotal.addEventListener("input", () => {
+      autoCalculateDevelopmentForTarget(readSafeInt(inpCustomTotal, 50));
+      buildInitialSchedule(false);
+    });
+    selIntroMode.addEventListener("change", () => {
+      if (selSessionPlan.value === "custom") {
+        autoCalculateDevelopmentForTarget(readSafeInt(inpCustomTotal, 50));
+      }
+      buildInitialSchedule(false);
+    });
     selEnem.addEventListener("change", () => buildInitialSchedule(false));
+    selEnemRedirect.addEventListener("change", () => buildInitialSchedule(false));
 
     [inpIntro, inpDev, inpOrient, inpExec, inpSoc, inpEnem, inpConcl].forEach(inp => {
       inp.addEventListener("input", () => buildInitialSchedule(false));
@@ -1527,7 +2119,6 @@
     chkAllowOvertime.addEventListener("change", updateDisplays);
     chkAutoAdvance.addEventListener("change", updateDisplays);
 
-    // Inicializa com o padrão de 57 minutos
     applyPlanPreset();
   })();
 </script>
